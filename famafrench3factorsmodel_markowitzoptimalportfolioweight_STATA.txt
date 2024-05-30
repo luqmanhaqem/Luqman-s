@@ -1,5 +1,6 @@
-cd "Z:\OneDrive - The University of Auckland\Year 3\FINANCE361\Assignment 1" Z:\OneDrive - The University of Auckland\Year 3\FINANCE361\Assignment 1
-use "Assignment_dataset.dta"
+cd "Directory"
+import delimited "HXZ.csv"
+save "HXZ.dta"
 
 # Drop missing values
 drop if missing(rf, msft, aapl, orcl)

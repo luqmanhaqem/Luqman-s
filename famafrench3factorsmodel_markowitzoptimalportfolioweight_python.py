@@ -4,7 +4,7 @@ import numpy as np
 import statsmodels.api as sm
 
 # Import csv file
-df = pd.read_csv("C:/Users/Admin/OneDrive - The University of Auckland/Year 3/FINANCE361\Assignment 1/Assignment_dataset.csv")
+df = pd.read_csv("HXZ.csv")
 
 # Drop missing values
 df.dropna(inplace=True)

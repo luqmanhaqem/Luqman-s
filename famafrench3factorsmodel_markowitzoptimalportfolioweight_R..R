@@ -6,7 +6,7 @@ install.packages("car")
 library(car)
 
 # Import data
-df <- read.csv("C:/Users/Admin/OneDrive - The University of Auckland/Year 3/FINANCE361/Assignment 1/Assignment_dataset.csv")
+df <- read.csv("HXZ.csv")
 view(df)
 
 # Drop missing values

@@ -1,0 +1,51 @@
+cd "Z:\OneDrive - The University of Auckland\Year 3\FINANCE361\Assignment 1" Z:\OneDrive - The University of Auckland\Year 3\FINANCE361\Assignment 1
+use "Assignment_dataset.dta"
+
+# Drop missing values
+drop if missing(rf, msft, aapl, orcl)
+
+# Demean the stocks
+egen mean_msft = mean(msft)
+egen mean_aapl = mean(aapl)
+egen mean_orcl = mean(orcl)
+gen demean_msft = msft - mean_msft
+gen demean_aapl = aapl - mean_aapl
+gen demean_orcl = orcl - mean_orcl
+
+# Create a matrix of demean return
+mkmat demean_msft demean_aapl demean_orcl, matrix(demean_return)
+matrix list demean_return
+
+# Transpose demeaned_stocks
+matrix demean_return_transpose = demean_return'
+
+# Calculate VCV Matrix
+matrix sigma = demean_return_transpose*demean_return/288
+matrix sigma_inv = inv(sigma)
+
+# Calculate stock excess return
+gen msftrf = msft - rf
+gen aaplrf = aapl - rf
+gen orclrf = orcl - rf
+egen mean_msftrf = mean(msftrf)
+egen mean_aaplrf = mean(aaplrf)
+egen mean_orclrf = mean(orclrf)
+matrix mu = (.0146017, .0298979, .0143903)
+matrix mu_transpose = mu'
+
+# Calculate Markowitz weight
+matrix sigma_inv_mu = sigma_inv*mu_transpose
+svmat sigma_inv_mu, names(sigma_inv_mu1)
+total(sigma_inv_mu1)
+matrix sigma_inv_mu = sigma_inv*mu_transpose
+matrix w = (sigma_inv_mu)/2.665701
+
+# Calculate portfolio excess return
+mkmat msftrf aaplrf orclrf, matrix(stock_excess_return)
+
+matrix list stock_excess_return
+matrix portfolio_excess_return = stock_excess_return*w
+svmat portfolio_excess_return, names(portfolio_excess_return)
+
+# Run Fama French 3 factors model
+reg portfolio_excess_return mktrf smb hml
